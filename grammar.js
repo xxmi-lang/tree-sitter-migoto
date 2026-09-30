@@ -1060,6 +1060,7 @@ export default grammar({
       $.resource_identifier,
       $.custom_resource,
       $.resource_pool,
+      $._whole_resource_pool,
     ),
 
     _limited_resource_operand: $ => choice(
@@ -1067,7 +1068,11 @@ export default grammar({
       $.resource_identifier,
       $.custom_resource,
       $.resource_pool,
+      $._whole_resource_pool,
     ),
+
+    // XXMI: a pool without an index targets the whole pool (e.g. `PoolFoo = null`, `PoolFoo->Size`)
+    _whole_resource_pool: $ => prec(-1, alias($._resource_pool_base, $.resource_pool)),
 
     builtin_function: $ => prec.left(PREC.SUFFIX, seq(
       alias($.fixed_value, $.function_name),

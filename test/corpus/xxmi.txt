@@ -94,3 +94,84 @@ $is_rt = ($flags & D3D11_BIND_RENDER_TARGET) != 0
                 (variable_identifier))
               (bind_flag)))
           (numeric_constant))))))
+
+====
+XXMI: pool without an index targets the whole pool
+====
+
+[Poolt]
+pool_size = 19
+
+[CommandList.Reset]
+Poolt = null
+$Poolt[*] = $default_filter
+ResourceFirst = ref Poolt[0]
+local $n = Poolt->Size
+local $m = #Poolt
+local $id = @Poolt
+
+---
+
+(document
+  (setting_section
+    (setting_section_header
+      (header_prefix)
+      (header_identifier))
+    (setting_section_body
+      (setting_statement
+        (setting_statement_key)
+        (setting_statement_value
+          (numeric_constant)))))
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (resource_pool
+          (resource_prefix)
+          (section_identifier))
+        (resource_usage_expression
+          (resource_identifier
+            (null))))
+      (assignment_statement
+        (pooled_variable
+          (resource_pool
+            (resource_prefix)
+            (section_identifier)
+            (index_expression)))
+        (named_variable
+          (variable_identifier)))
+      (assignment_statement
+        (custom_resource
+          (resource_prefix)
+          (section_identifier))
+        (resource_usage_expression
+          (resource_modifier)
+          (resource_pool
+            (resource_prefix)
+            (section_identifier)
+            (index_expression
+              (numeric_constant)))))
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (resource_pool
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)))
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (unary_expression
+          (resource_pool
+            (resource_prefix)
+            (section_identifier))))
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (unary_expression
+          (resource_pool
+            (resource_prefix)
+            (section_identifier)))))))

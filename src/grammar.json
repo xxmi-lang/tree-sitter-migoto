@@ -4151,6 +4151,10 @@
         {
           "type": "SYMBOL",
           "name": "resource_pool"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_whole_resource_pool"
         }
       ]
     },
@@ -4172,8 +4176,25 @@
         {
           "type": "SYMBOL",
           "name": "resource_pool"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_whole_resource_pool"
         }
       ]
+    },
+    "_whole_resource_pool": {
+      "type": "PREC",
+      "value": -1,
+      "content": {
+        "type": "ALIAS",
+        "content": {
+          "type": "SYMBOL",
+          "name": "_resource_pool_base"
+        },
+        "named": true,
+        "value": "resource_pool"
+      }
     },
     "builtin_function": {
       "type": "PREC_LEFT",

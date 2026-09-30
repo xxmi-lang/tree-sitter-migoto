@@ -41,3 +41,18 @@ Rules for changes in this fork:
   characters".
 - **Note:** the doc listed this gap as "multi-segment namespace?". `namespace = SlotFix\Matches`
   parses fine; the format operand was the cause.
+
+### 3. A pool without an index is a resource operand
+
+- **Construct:** `Poolt = null` (ZZMI `Libraries/SlotFix/SlotFix.ini`, line 983). The same gap
+  broke `PoolFoo->Size`. `resource_pool` always required an `[index]`; only `@PoolFoo`/`#PoolFoo`
+  allowed the bare form.
+- **DLL source:** `DirectX11/CommandList.cpp`, `ResourceCopyTarget::ParseTargetPool`:
+  "No pool index specified, treat target as non-evaluatable pool" (`ResourceCopyTargetType::POOL`),
+  and "Treat #PoolName and PoolName->Size as POOL_SIZE".
+- **Fix:** `grammar.js`, new hidden `_whole_resource_pool` (an alias of `_resource_pool_base` to
+  `resource_pool`, so queries see the same node) in `_resource_operand` and
+  `_limited_resource_operand`.
+- **Test:** `test/corpus/xxmi.txt`, "XXMI: pool without an index targets the whole pool".
+- **Note:** the doc attributed this gap to `$Poolt[*] = …`. The wildcard already parsed; the line
+  before it was the cause.
