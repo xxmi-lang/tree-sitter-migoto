@@ -913,6 +913,9 @@ static inline bool scan_custom_resource_identifier(TSLexer *lexer) {
         case '^':
         case '(':
         case ')':
+        // XXMI: ',' separates command arguments (e.g. `store = $v, ResourceFoo, 7`), see
+        // CommandArgumentReader::GetTokenInternal in XXMI-Libs-Package DirectX11/CommandList.cpp
+        case ',':
             is_terminal_ahead = true;
             break;
         case '!':

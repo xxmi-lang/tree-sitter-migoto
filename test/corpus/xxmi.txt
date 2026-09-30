@@ -1,0 +1,47 @@
+====
+XXMI: store with custom resource source
+====
+
+[CommandList.SetValue]
+store = $store_temp, Resource.UAV, 7
+store = $\Healthbar\temp, ResourceBuffer, 15
+$hp_main = (($store_temp >> 14) & 127) * 0.01
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (store_instruction
+        (instruction)
+        (named_variable
+          (variable_identifier))
+        (custom_resource
+          (resource_prefix)
+          (section_identifier))
+        (numeric_constant))
+      (store_instruction
+        (instruction)
+        (named_variable
+          (namespace)
+          (variable_identifier))
+        (custom_resource
+          (resource_prefix)
+          (section_identifier))
+        (numeric_constant))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (parenthesized_expression
+            (binary_expression
+              (parenthesized_expression
+                (binary_expression
+                  (named_variable
+                    (variable_identifier))
+                  (numeric_constant)))
+              (numeric_constant)))
+          (numeric_constant))))))
