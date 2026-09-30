@@ -1,0 +1,98 @@
+# XXMI fork: monthly merge of lupomikti/tree-sitter-migoto main into our `xxmi` branch.
+# Opens a PR when upstream has commits we don't have. Conflicts are left for a human to resolve
+# (favor upstream's structure, then re-apply the entries in XXMI-CHANGES.md).
+name: upstream-sync
+
+on:
+  schedule:
+    - cron: "0 6 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: upstream-sync
+  cancel-in-progress: false
+
+env:
+  UPSTREAM_URL: https://github.com/lupomikti/tree-sitter-migoto.git
+  UPSTREAM_BRANCH: main
+  FORK_BRANCH: xxmi
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.FORK_BRANCH }}
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch upstream
+        run: |
+          git remote add upstream "$UPSTREAM_URL"
+          git fetch upstream "$UPSTREAM_BRANCH"
+
+      - name: Check for new upstream commits
+        id: check
+        run: |
+          count=$(git rev-list --count "HEAD..upstream/$UPSTREAM_BRANCH")
+          echo "new_commits=$count" >> "$GITHUB_OUTPUT"
+          echo "Upstream commits not in $FORK_BRANCH: $count"
+
+      - name: Merge upstream
+        if: steps.check.outputs.new_commits != '0'
+        id: merge
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          branch="upstream-sync/$(date -u +%Y-%m)"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          git checkout -b "$branch"
+          if git merge --no-edit "upstream/$UPSTREAM_BRANCH"; then
+            echo "conflicts=false" >> "$GITHUB_OUTPUT"
+          else
+            git merge --abort
+            # Hand the raw upstream head to a human; the PR will show the conflicts.
+            git reset --hard "upstream/$UPSTREAM_BRANCH"
+            echo "conflicts=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Regenerate and test
+        if: steps.check.outputs.new_commits != '0' && steps.merge.outputs.conflicts == 'false'
+        run: |
+          npm ci --ignore-scripts
+          (cd node_modules/tree-sitter-cli && node install.js)
+          npx tree-sitter generate
+          npx tree-sitter test --wasm
+          if ! git diff --quiet; then
+            git commit -am "chore: regenerate parser after upstream merge"
+          fi
+
+      - name: Open PR
+        if: steps.check.outputs.new_commits != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ steps.merge.outputs.branch }}
+          CONFLICTS: ${{ steps.merge.outputs.conflicts }}
+          NEW_COMMITS: ${{ steps.check.outputs.new_commits }}
+        run: |
+          git push --force origin "$BRANCH"
+          if [ "$CONFLICTS" = "true" ]; then
+            title="Upstream sync (conflicts): $NEW_COMMITS new upstream commits"
+            body="Merging upstream \`$UPSTREAM_BRANCH\` into \`$FORK_BRANCH\` has conflicts. This branch is upstream's head; resolve by merging it into \`$FORK_BRANCH\` locally, favoring upstream's structure, then re-apply XXMI-CHANGES.md and run \`tree-sitter test --wasm\`."
+          else
+            title="Upstream sync: $NEW_COMMITS new upstream commits"
+            body="Clean merge of upstream \`$UPSTREAM_BRANCH\`. Parser regenerated and \`tree-sitter test --wasm\` passed. Check that every XXMI-CHANGES.md entry still applies."
+          fi
+          if gh pr view "$BRANCH" --json state -q .state 2>/dev/null | grep -q OPEN; then
+            echo "PR already open for $BRANCH"
+          else
+            gh pr create --base "$FORK_BRANCH" --head "$BRANCH" --title "$title" --body "$body"
+          fi

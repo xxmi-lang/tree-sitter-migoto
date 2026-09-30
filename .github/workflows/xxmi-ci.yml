@@ -1,0 +1,43 @@
+# XXMI fork: check that the generated parser is up to date, run the corpus tests,
+# and publish the WASM build that @xxmi-lang/core vendors.
+name: xxmi-ci
+
+on:
+  push:
+    branches: [xxmi]
+  pull_request:
+    branches: [xxmi]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install tree-sitter CLI
+        run: |
+          npm ci --ignore-scripts
+          (cd node_modules/tree-sitter-cli && node install.js)
+
+      - name: Generated parser is up to date
+        run: |
+          npx tree-sitter generate
+          git diff --exit-code -- src/
+
+      - name: Corpus tests
+        run: npx tree-sitter test --wasm
+
+      - name: Build WASM
+        run: npx tree-sitter build --wasm -o tree-sitter-migoto.wasm
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tree-sitter-migoto-wasm
+          path: tree-sitter-migoto.wasm
