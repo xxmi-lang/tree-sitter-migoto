@@ -7091,12 +7091,12 @@
     },
     "_resource_format": {
       "type": "PATTERN",
-      "value": "DXGI_FORMAT_.+",
+      "value": "DXGI_FORMAT_[a-z0-9_]+",
       "flags": "i"
     },
     "bind_flag": {
       "type": "PATTERN",
-      "value": "D3D11_BIND_.+",
+      "value": "D3D11_BIND_[a-z0-9_]+",
       "flags": "i"
     },
     "shader_semantic": {

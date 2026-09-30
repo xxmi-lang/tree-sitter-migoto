@@ -26,3 +26,18 @@ Rules for changes in this fork:
 - **Fix:** `src/scanner.c`, `,` is a terminal in `scan_custom_resource_identifier`.
   Section names already exclude `,` (`custom_section_name` in `grammar.js`).
 - **Test:** `test/corpus/xxmi.txt`, "XXMI: store with custom resource source".
+
+### 2. `DXGI_FORMAT_*` and `D3D11_BIND_*` operands end at identifier characters
+
+- **Construct:** `($format == DXGI_FORMAT_R16_TYPELESS || $format == DXGI_FORMAT_R16_FLOAT)`
+  (ZZMI `Libraries/SlotFix/Matches.ini`). `_resource_format` was `/DXGI_FORMAT_.+/`, which ate
+  the rest of the line (`)`, `||`, …), so the whole file failed to parse. `bind_flag` had the same
+  pattern.
+- **DLL source:** `DirectX11/CommandList.cpp`, `tokenise()` ends a non-prefixed operand at
+  `FindIdentifierTokenEnd` (`is_identifier_char`: `[a-z0-9_]`, case-insensitive).
+- **Fix:** `grammar.js`, `_resource_format: /DXGI_FORMAT_[a-z0-9_]+/i` and
+  `bind_flag: /D3D11_BIND_[a-z0-9_]+/i`.
+- **Test:** `test/corpus/xxmi.txt`, "XXMI: DXGI format and bind flag operands end at identifier
+  characters".
+- **Note:** the doc listed this gap as "multi-segment namespace?". `namespace = SlotFix\Matches`
+  parses fine; the format operand was the cause.

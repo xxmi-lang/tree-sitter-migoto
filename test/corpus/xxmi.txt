@@ -45,3 +45,52 @@ $hp_main = (($store_temp >> 14) & 127) * 0.01
                   (numeric_constant)))
               (numeric_constant)))
           (numeric_constant))))))
+
+====
+XXMI: DXGI format and bind flag operands end at identifier characters
+====
+
+[CommandList.Run]
+if $mips == 1 && ($format == DXGI_FORMAT_R16_TYPELESS || $format == DXGI_FORMAT_R16_FLOAT)
+	$match = 5353.1
+endif
+$is_rt = ($flags & D3D11_BIND_RENDER_TARGET) != 0
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (conditional_statement
+        (if_statement
+          (binary_expression
+            (binary_expression
+              (named_variable
+                (variable_identifier))
+              (numeric_constant))
+            (parenthesized_expression
+              (binary_expression
+                (binary_expression
+                  (named_variable
+                    (variable_identifier)))
+                (binary_expression
+                  (named_variable
+                    (variable_identifier))))))
+          (block
+            (assignment_statement
+              (named_variable
+                (variable_identifier))
+              (numeric_constant)))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (parenthesized_expression
+            (binary_expression
+              (named_variable
+                (variable_identifier))
+              (bind_flag)))
+          (numeric_constant))))))
