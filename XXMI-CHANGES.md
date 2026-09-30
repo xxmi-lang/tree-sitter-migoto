@@ -56,3 +56,19 @@ Rules for changes in this fork:
 - **Test:** `test/corpus/xxmi.txt`, "XXMI: pool without an index targets the whole pool".
 - **Note:** the doc attributed this gap to `$Poolt[*] = …`. The wildcard already parsed; the line
   before it was the cause.
+
+### 4. A resource copy source may carry a member suffix
+
+- **Construct:** `ResourceUIPlacementQuad = copy vb0->Region($offset, 4 * $stride)`
+  (ZZMI `Libraries/TTLib/UIPlacement.ini`, line 203). `resource_usage_expression` only accepted a
+  plain resource operand.
+- **DLL source:** `DirectX11/CommandList.cpp`, `ResourceCopyTarget::ParseTarget` consumes "an
+  optional resource member suffix (e.g. `->HashRegion(0, 16)` or `->Length`)" via
+  `ResourceCopyTarget::ParseTargetMember` (member table: `->region`, `->hashregion`, …) before
+  resolving the resource. `SpecialCopyBufferRegion` and the `cs-cb0 = ref vs-cb0->Region(...)`
+  comment show the copy/ref use.
+- **Fix:** `grammar.js`, `resource_usage_expression` accepts `property_access_expression` as its
+  operand.
+- **Test:** `test/corpus/xxmi.txt`, "XXMI: resource copy source with a member suffix".
+- **Note:** the doc also listed `local $offset = vb0->Offset` and `ref PoolX[$slot]` near this
+  error. Both already parsed and are kept in the test as regression cover.

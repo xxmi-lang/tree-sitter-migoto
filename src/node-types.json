@@ -2858,6 +2858,10 @@
           "named": true
         },
         {
+          "type": "property_access_expression",
+          "named": true
+        },
+        {
           "type": "resource_identifier",
           "named": true
         },

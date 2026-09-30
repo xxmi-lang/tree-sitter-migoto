@@ -4116,8 +4116,17 @@
           }
         },
         {
-          "type": "SYMBOL",
-          "name": "_resource_operand"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_resource_operand"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "property_access_expression"
+            }
+          ]
         },
         {
           "type": "REPEAT",

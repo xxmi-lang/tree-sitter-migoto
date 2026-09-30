@@ -175,3 +175,68 @@ local $id = @Poolt
           (resource_pool
             (resource_prefix)
             (section_identifier)))))))
+
+====
+XXMI: resource copy source with a member suffix
+====
+
+[CommandListUIPlacement.Capture]
+local $offset = vb0->Offset
+ResourceUIPlacementQuad = copy vb0->Region($offset, 4 * $stride)
+cs-cb0 = ref vs-cb0->Region($offset, $size)
+ResourceUIPlacementRecord = ref PoolUIPlacementRecords[$slot]
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (buffer_variable)
+          (resource_property)))
+      (assignment_statement
+        (custom_resource
+          (resource_prefix)
+          (section_identifier))
+        (resource_usage_expression
+          (resource_modifier)
+          (property_access_expression
+            (buffer_variable)
+            (resource_property)
+            (arguments
+              (named_variable
+                (variable_identifier))
+              (binary_expression
+                (numeric_constant)
+                (named_variable
+                  (variable_identifier)))))))
+      (assignment_statement
+        (buffer_variable)
+        (resource_usage_expression
+          (resource_modifier)
+          (property_access_expression
+            (buffer_variable)
+            (resource_property)
+            (arguments
+              (named_variable
+                (variable_identifier))
+              (named_variable
+                (variable_identifier))))))
+      (assignment_statement
+        (custom_resource
+          (resource_prefix)
+          (section_identifier))
+        (resource_usage_expression
+          (resource_modifier)
+          (resource_pool
+            (resource_prefix)
+            (section_identifier)
+            (index_expression
+              (named_variable
+                (variable_identifier)))))))))

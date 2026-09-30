@@ -1048,7 +1048,8 @@ export default grammar({
 
     resource_usage_expression: $ => seq(
       repeat($.resource_modifier),
-      $._resource_operand,
+      // XXMI: the source may carry a member suffix (e.g. `copy vb0->Region($offset, $size)`)
+      choice($._resource_operand, $.property_access_expression),
       repeat($.resource_modifier),
     ),
 
