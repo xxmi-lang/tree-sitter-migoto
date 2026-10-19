@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-migoto
-        VERSION "0.9.3"
+        VERSION "0.9.4"
         DESCRIPTION "A tree-sitter parser for the DSL of the INI files used by 3Dmigoto"
         HOMEPAGE_URL "https://github.com/lupomikti/tree-sitter-migoto"
         LANGUAGES C)

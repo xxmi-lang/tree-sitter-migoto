@@ -15,7 +15,14 @@ Rules for changes in this fork:
 
 ## Changes
 
-### 1. `,` ends a custom resource identifier
+Upstream 0.9.4 (merged here on 2026-10-19) fixed changes 1–4 in its own way: `0c1ac03` (1),
+`b0e0ebb` (2), `a4ff97c` (3 and 4). Their tests below still pass on upstream's code. The one piece
+re-applied on top is in change 3: upstream accepts a bare pool through the hidden
+`_resource_pool_base`, which leaves no `resource_pool` node, so we alias it
+(`_bare_resource_pool`), as upstream already does for `@Pool`/`#Pool`. xxmi-lang reads
+`resource_pool` nodes as pool references.
+
+### 1. `,` ends a custom resource identifier (upstream since 0.9.4)
 
 - **Construct:** `store = $store_temp, Resource.UAV, 7` (ZZMI `Libraries/HP bar/hp.ini`).
   The external scanner's `scan_custom_resource_identifier` read `.UAV,` as the resource name,
@@ -27,7 +34,7 @@ Rules for changes in this fork:
   Section names already exclude `,` (`custom_section_name` in `grammar.js`).
 - **Test:** `test/corpus/xxmi.txt`, "XXMI: store with custom resource source".
 
-### 2. `DXGI_FORMAT_*` and `D3D11_BIND_*` operands end at identifier characters
+### 2. `DXGI_FORMAT_*` and `D3D11_BIND_*` operands end at identifier characters (upstream since 0.9.4)
 
 - **Construct:** `($format == DXGI_FORMAT_R16_TYPELESS || $format == DXGI_FORMAT_R16_FLOAT)`
   (ZZMI `Libraries/SlotFix/Matches.ini`). `_resource_format` was `/DXGI_FORMAT_.+/`, which ate
@@ -42,7 +49,7 @@ Rules for changes in this fork:
 - **Note:** the doc listed this gap as "multi-segment namespace?". `namespace = SlotFix\Matches`
   parses fine; the format operand was the cause.
 
-### 3. A pool without an index is a resource operand
+### 3. A pool without an index is a resource operand (upstream since 0.9.4, alias re-applied)
 
 - **Construct:** `Poolt = null` (ZZMI `Libraries/SlotFix/SlotFix.ini`, line 983). The same gap
   broke `PoolFoo->Size`. `resource_pool` always required an `[index]`; only `@PoolFoo`/`#PoolFoo`
@@ -57,7 +64,7 @@ Rules for changes in this fork:
 - **Note:** the doc attributed this gap to `$Poolt[*] = …`. The wildcard already parsed; the line
   before it was the cause.
 
-### 4. A resource copy source may carry a member suffix
+### 4. A resource copy source may carry a member suffix (upstream since 0.9.4)
 
 - **Construct:** `ResourceUIPlacementQuad = copy vb0->Region($offset, 4 * $stride)`
   (ZZMI `Libraries/TTLib/UIPlacement.ini`, line 203). `resource_usage_expression` only accepted a

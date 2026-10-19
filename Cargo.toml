@@ -1,7 +1,7 @@
 [package]
 name = "tree-sitter-migoto"
 description = "A tree-sitter parser for the DSL of the INI files used by 3Dmigoto"
-version = "0.9.3"
+version = "0.9.4"
 license = "MIT"
 readme = "README.md"
 keywords = ["incremental", "parsing", "tree-sitter", "migoto"]

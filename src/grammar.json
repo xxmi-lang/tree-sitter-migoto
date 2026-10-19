@@ -2602,8 +2602,17 @@
                   "type": "FIELD",
                   "name": "name",
                   "content": {
-                    "type": "SYMBOL",
-                    "name": "_limited_resource_operand"
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "_limited_resource_operand"
+                      },
+                      {
+                        "type": "SYMBOL",
+                        "name": "_bare_resource_pool"
+                      }
+                    ]
                   }
                 },
                 {
@@ -4124,7 +4133,16 @@
             },
             {
               "type": "SYMBOL",
-              "name": "property_access_expression"
+              "name": "_bare_resource_pool"
+            },
+            {
+              "type": "ALIAS",
+              "content": {
+                "type": "SYMBOL",
+                "name": "_resource_property_method_call"
+              },
+              "named": true,
+              "value": "property_access_expression"
             }
           ]
         },
@@ -4160,10 +4178,6 @@
         {
           "type": "SYMBOL",
           "name": "resource_pool"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_whole_resource_pool"
         }
       ]
     },
@@ -4185,25 +4199,8 @@
         {
           "type": "SYMBOL",
           "name": "resource_pool"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "_whole_resource_pool"
         }
       ]
-    },
-    "_whole_resource_pool": {
-      "type": "PREC",
-      "value": -1,
-      "content": {
-        "type": "ALIAS",
-        "content": {
-          "type": "SYMBOL",
-          "name": "_resource_pool_base"
-        },
-        "named": true,
-        "value": "resource_pool"
-      }
     },
     "builtin_function": {
       "type": "PREC_LEFT",
@@ -4238,8 +4235,17 @@
         "type": "SEQ",
         "members": [
           {
-            "type": "SYMBOL",
-            "name": "_resource_operand"
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_resource_operand"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_bare_resource_pool"
+              }
+            ]
           },
           {
             "type": "FIELD",
@@ -4273,6 +4279,53 @@
                 "type": "BLANK"
               }
             ]
+          }
+        ]
+      }
+    },
+    "_resource_property_method_call": {
+      "type": "PREC_LEFT",
+      "value": 15,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_resource_operand"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_bare_resource_pool"
+              }
+            ]
+          },
+          {
+            "type": "FIELD",
+            "name": "operator",
+            "content": {
+              "type": "STRING",
+              "value": "->"
+            }
+          },
+          {
+            "type": "ALIAS",
+            "content": {
+              "type": "SYMBOL",
+              "name": "fixed_value"
+            },
+            "named": true,
+            "value": "resource_property"
+          },
+          {
+            "type": "FIELD",
+            "name": "arguments",
+            "content": {
+              "type": "SYMBOL",
+              "name": "arguments"
+            }
           }
         ]
       }
@@ -6449,6 +6502,15 @@
         ]
       }
     },
+    "_bare_resource_pool": {
+      "type": "ALIAS",
+      "content": {
+        "type": "SYMBOL",
+        "name": "_resource_pool_base"
+      },
+      "named": true,
+      "value": "resource_pool"
+    },
     "_resource_pool_base": {
       "type": "SEQ",
       "members": [
@@ -7121,12 +7183,12 @@
     },
     "_resource_format": {
       "type": "PATTERN",
-      "value": "DXGI_FORMAT_[a-z0-9_]+",
+      "value": "DXGI_FORMAT_\\w+",
       "flags": "i"
     },
     "bind_flag": {
       "type": "PATTERN",
-      "value": "D3D11_BIND_[a-z0-9_]+",
+      "value": "D3D11_BIND_\\w+",
       "flags": "i"
     },
     "shader_semantic": {
