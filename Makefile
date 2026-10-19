@@ -1,6 +1,6 @@
 LANGUAGE_NAME := tree-sitter-migoto
 HOMEPAGE_URL := https://github.com/lupomikti/tree-sitter-migoto
-VERSION := 0.9.3
+VERSION := 0.9.4
 DESCRIPTION := A tree-sitter parser for the DSL of the INI files used by 3Dmigoto
 
 # repository

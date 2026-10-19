@@ -754,7 +754,7 @@ export default grammar({
           $._newline,
         ),
         seq(
-          field('name', $._limited_resource_operand),
+          field('name', choice($._limited_resource_operand, $._bare_resource_pool)),
           '=',
           field('expression', $.resource_usage_expression),
           $._newline,
@@ -1048,8 +1048,11 @@ export default grammar({
 
     resource_usage_expression: $ => seq(
       repeat($.resource_modifier),
-      // XXMI: the source may carry a member suffix (e.g. `copy vb0->Region($offset, $size)`)
-      choice($._resource_operand, $.property_access_expression),
+      choice(
+        $._resource_operand,
+        $._bare_resource_pool,
+        alias($._resource_property_method_call, $.property_access_expression),
+      ),
       repeat($.resource_modifier),
     ),
 
@@ -1058,22 +1061,19 @@ export default grammar({
 
     _resource_operand: $ => choice(
       $._language_variable,
+      $.slot_expression,
       $.resource_identifier,
       $.custom_resource,
       $.resource_pool,
-      $._whole_resource_pool,
     ),
 
     _limited_resource_operand: $ => choice(
       $._limited_language_variable,
+      $.slot_expression,
       $.resource_identifier,
       $.custom_resource,
       $.resource_pool,
-      $._whole_resource_pool,
     ),
-
-    // XXMI: a pool without an index targets the whole pool (e.g. `PoolFoo = null`, `PoolFoo->Size`)
-    _whole_resource_pool: $ => prec(-1, alias($._resource_pool_base, $.resource_pool)),
 
     builtin_function: $ => prec.left(PREC.SUFFIX, seq(
       alias($.fixed_value, $.function_name),
@@ -1083,12 +1083,22 @@ export default grammar({
     )),
 
     property_access_expression: $ => prec.left(PREC.SUFFIX, seq(
-      $._resource_operand,
+      choice($._resource_operand, $._bare_resource_pool),
       field('operator', '->'),
       alias($.fixed_value, $.resource_property),
       // technically xxmi only allows a subset of operands as arguments
       // but we ignore that here for simplicity
       optional(field('arguments', $.arguments)),
+    )),
+
+    // differs from the above in that that arguments are required
+    _resource_property_method_call: $ => prec.left(PREC.SUFFIX, seq(
+      choice($._resource_operand, $._bare_resource_pool),
+      field('operator', '->'),
+      alias($.fixed_value, $.resource_property),
+      // technically xxmi only allows a subset of operands as arguments
+      // but we ignore that here for simplicity
+      field('arguments', $.arguments),
     )),
 
     arguments: $ => seq(
@@ -1243,6 +1253,10 @@ export default grammar({
       alias($._index_suffix, $.index_expression),
     )),
 
+    // XXMI: a pool without an index keeps its resource_pool node, as for `@Pool`/`#Pool`, so
+    // a bare `PoolFoo` is still a reference (ResourceCopyTarget::ParseTargetPool)
+    _bare_resource_pool: $ => alias($._resource_pool_base, $.resource_pool),
+
     _resource_pool_base: $ => seq(
       alias($._resourcepool_header_prefix, $.resource_prefix),
       $._useable_resource_identifier,
@@ -1255,7 +1269,20 @@ export default grammar({
 
     _index_suffix: $ => seq(
       '[',
-      choice($.numeric_constant, $._scalar_variable, $.runtime_parameter, '*'),
+      choice($._index_bound, '*', $._index_range),
+      ']',
+    ),
+
+    _index_bound: $ => choice($.numeric_constant, $._scalar_variable, $.runtime_parameter),
+
+    // XXMI: `PoolFoo[$a:$b]` and `ps-t[$a:$b]` (ResourceCopyTarget::ParseRangeBounds)
+    _index_range: $ => seq(field('start', $._index_bound), ':', field('end', $._index_bound)),
+
+    // XXMI: a slot given by an expression or a range, `ps-t[$i]`, `ps-t[$a:$b]`
+    // (ResourceCopyTarget::ParseTargetSlotExpression). The DLL rejects ranges on o, vb and so.
+    slot_expression: $ => seq(
+      alias(/(?:[vhdgpc]s-(?:t|cb)|[pc]s-u|o|vb|so)\[/i, $.slot_type),
+      alias(choice($._index_bound, $._index_range), $.index_expression),
       ']',
     ),
 
@@ -1401,9 +1428,9 @@ export default grammar({
     resource_format: _ => dxgi_types_regex,
 
     // Exists to enforce required prefix when used as an operand
-    _resource_format: _ => /DXGI_FORMAT_[a-z0-9_]+/i,
+    _resource_format: _ => /DXGI_FORMAT_\w+/i,
 
-    bind_flag: _ => /D3D11_BIND_[a-z0-9_]+/i,
+    bind_flag: _ => /D3D11_BIND_\w+/i,
 
     shader_semantic: _ => choice(
       hlsl_semantic_regex_d3d9up,
