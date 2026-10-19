@@ -1061,6 +1061,7 @@ export default grammar({
 
     _resource_operand: $ => choice(
       $._language_variable,
+      $.slot_expression,
       $.resource_identifier,
       $.custom_resource,
       $.resource_pool,
@@ -1068,6 +1069,7 @@ export default grammar({
 
     _limited_resource_operand: $ => choice(
       $._limited_language_variable,
+      $.slot_expression,
       $.resource_identifier,
       $.custom_resource,
       $.resource_pool,
@@ -1267,7 +1269,20 @@ export default grammar({
 
     _index_suffix: $ => seq(
       '[',
-      choice($.numeric_constant, $._scalar_variable, $.runtime_parameter, '*'),
+      choice($._index_bound, '*', $._index_range),
+      ']',
+    ),
+
+    _index_bound: $ => choice($.numeric_constant, $._scalar_variable, $.runtime_parameter),
+
+    // XXMI: `PoolFoo[$a:$b]` and `ps-t[$a:$b]` (ResourceCopyTarget::ParseRangeBounds)
+    _index_range: $ => seq(field('start', $._index_bound), ':', field('end', $._index_bound)),
+
+    // XXMI: a slot given by an expression or a range, `ps-t[$i]`, `ps-t[$a:$b]`
+    // (ResourceCopyTarget::ParseTargetSlotExpression). The DLL rejects ranges on o, vb and so.
+    slot_expression: $ => seq(
+      alias(/(?:[vhdgpc]s-(?:t|cb)|[pc]s-u|o|vb|so)\[/i, $.slot_type),
+      alias(choice($._index_bound, $._index_range), $.index_expression),
       ']',
     ),
 

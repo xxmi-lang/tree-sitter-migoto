@@ -4169,6 +4169,10 @@
         },
         {
           "type": "SYMBOL",
+          "name": "slot_expression"
+        },
+        {
+          "type": "SYMBOL",
           "name": "resource_identifier"
         },
         {
@@ -4187,6 +4191,10 @@
         {
           "type": "SYMBOL",
           "name": "_limited_language_variable"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "slot_expression"
         },
         {
           "type": "SYMBOL",
@@ -6567,21 +6575,96 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "numeric_constant"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "_scalar_variable"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "runtime_parameter"
+              "name": "_index_bound"
             },
             {
               "type": "STRING",
               "value": "*"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "_index_range"
             }
           ]
+        },
+        {
+          "type": "STRING",
+          "value": "]"
+        }
+      ]
+    },
+    "_index_bound": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "numeric_constant"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_scalar_variable"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "runtime_parameter"
+        }
+      ]
+    },
+    "_index_range": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "FIELD",
+          "name": "start",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_index_bound"
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "FIELD",
+          "name": "end",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_index_bound"
+          }
+        }
+      ]
+    },
+    "slot_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "PATTERN",
+            "value": "(?:[vhdgpc]s-(?:t|cb)|[pc]s-u|o|vb|so)\\[",
+            "flags": "i"
+          },
+          "named": true,
+          "value": "slot_type"
+        },
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "_index_bound"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "_index_range"
+              }
+            ]
+          },
+          "named": true,
+          "value": "index_expression"
         },
         {
           "type": "STRING",

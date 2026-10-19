@@ -79,3 +79,20 @@ re-applied on top is in change 3: upstream accepts a bare pool through the hidde
 - **Test:** `test/corpus/xxmi.txt`, "XXMI: resource copy source with a member suffix".
 - **Note:** the doc also listed `local $offset = vb0->Offset` and `ref PoolX[$slot]` near this
   error. Both already parsed and are kept in the test as regression cover.
+
+### 5. Slot expressions and slot/pool ranges
+
+- **Construct:** `ps-t[$i] = ResourceFoo`, `ps-t[0:2] = null`, `vs-cb[$first:$last] = null`,
+  `ResourceFoo = copy ps-t[$i]`, `PoolFoo[$first:$last] = null`. These failed to parse, and the
+  syntax error swallowed the rest of the section.
+- **DLL source:** `DirectX11/CommandList.cpp`, `ResourceCopyTarget::ParseTargetSlotExpression`
+  (slot types `o`, `vb`, `so`, `?s-t`, `ps-u`/`cs-u`, `?s-cb`, followed by `[expression]` or
+  `[start:end]`; ranges only for `-t`, `-u`, `-cb`), `ResourceCopyTarget::ParseTargetPool`
+  ("Pool range: PoolFoo[$a:$b], resources only") and `ResourceCopyTarget::ParseRangeBounds`.
+  Added in XXMI-Libs-Package `34fa32f` (PR #55).
+- **Fix:** `grammar.js`, new `slot_expression` (`slot_type` + `index_expression`) in
+  `_resource_operand` and `_limited_resource_operand`; `_index_suffix` accepts a `start:end`
+  range (fields `start`, `end`). Bounds take the same operands as a pool index (numbers,
+  variables, runtime parameters); the DLL accepts any expression there. The grammar doesn't
+  enforce which slot types take ranges.
+- **Test:** `test/corpus/xxmi.txt`, "XXMI: slot expressions and slot/pool ranges".

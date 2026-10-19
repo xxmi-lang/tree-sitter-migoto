@@ -240,3 +240,95 @@ ResourceUIPlacementRecord = ref PoolUIPlacementRecords[$slot]
             (index_expression
               (named_variable
                 (variable_identifier)))))))))
+
+================================================================================
+XXMI: slot expressions and slot/pool ranges
+================================================================================
+
+[CommandListRanges]
+ps-t[0:2] = null
+vs-cb[$first:$last] = null
+cs-u[$i] = ResourceTex
+o[$i] = ResourceTex
+ResourceTex = copy ps-t[$i]
+PoolA[$first:$last] = null
+PoolA = null
+
+--------------------------------------------------------------------------------
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (slot_expression
+          (slot_type)
+          (index_expression
+            (numeric_constant)
+            (numeric_constant)))
+        (resource_usage_expression
+          (resource_identifier
+            (null))))
+      (assignment_statement
+        (slot_expression
+          (slot_type)
+          (index_expression
+            (named_variable
+              (variable_identifier))
+            (named_variable
+              (variable_identifier))))
+        (resource_usage_expression
+          (resource_identifier
+            (null))))
+      (assignment_statement
+        (slot_expression
+          (slot_type)
+          (index_expression
+            (named_variable
+              (variable_identifier))))
+        (resource_usage_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (slot_expression
+          (slot_type)
+          (index_expression
+            (named_variable
+              (variable_identifier))))
+        (resource_usage_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (custom_resource
+          (resource_prefix)
+          (section_identifier))
+        (resource_usage_expression
+          (resource_modifier)
+          (slot_expression
+            (slot_type)
+            (index_expression
+              (named_variable
+                (variable_identifier))))))
+      (assignment_statement
+        (resource_pool
+          (resource_prefix)
+          (section_identifier)
+          (index_expression
+            (named_variable
+              (variable_identifier))
+            (named_variable
+              (variable_identifier))))
+        (resource_usage_expression
+          (resource_identifier
+            (null))))
+      (assignment_statement
+        (resource_pool
+          (resource_prefix)
+          (section_identifier))
+        (resource_usage_expression
+          (resource_identifier
+            (null)))))))
