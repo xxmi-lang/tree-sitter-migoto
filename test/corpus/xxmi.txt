@@ -332,3 +332,150 @@ PoolA = null
         (resource_usage_expression
           (resource_identifier
             (null)))))))
+
+====
+XXMI: run with snapshot and restore of original textures
+====
+
+[CommandList.Textures]
+run = SnapshotOriginalTextures
+post run = RestoreOriginalTextures
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (run_instruction_key_value))
+      (run_instruction
+        (execution_modifier)
+        (instruction)
+        (run_instruction_key_value)))))
+
+====
+XXMI: MatchTextures destination takes a resource
+====
+
+[CommandList.Match]
+ps->MatchTextures(ResourceCandidate) = ResourceReplacement
+ps->MatchTextures(ResourceCandidate) = copy ResourceReplacement
+ps->MatchTextures(ResourceCandidate) = ref ps-t0
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (shader_identifier)
+        (resource_property)
+        (arguments
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (shader_identifier)
+        (resource_property)
+        (arguments
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (resource_modifier)
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (shader_identifier)
+        (resource_property)
+        (arguments
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (resource_modifier)
+          (shader_variable))))))
+
+====
+XXMI: hash literal and resource arguments of resource members
+====
+
+[CommandList.Members]
+$distance = ResourceA->HammingDistance(ResourceB)
+$format = ResourceA->GetMatchFormat
+$hash = ResourceA->HashRegion(0, 16)
+$hash = ResourceA->HashRegion(0x0123456789abcdef, 16)
+$distance = ResourceA->HammingDistance(ps-t0)
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)
+          (arguments
+            (custom_resource
+              (resource_prefix)
+              (section_identifier)))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)
+          (arguments
+            (numeric_constant)
+            (numeric_constant))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)
+          (arguments
+            (hex_integer)
+            (numeric_constant))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)
+          (arguments
+            (shader_variable)))))))

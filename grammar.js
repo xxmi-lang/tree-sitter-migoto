@@ -771,6 +771,17 @@ export default grammar({
           $._newline,
         ),
         seq(
+          prec.left(PREC.SUFFIX, seq(
+            $.shader_identifier,
+            field('operator', '->'),
+            alias($.fixed_value, $.resource_property),
+            field('arguments', $.arguments),
+          )),
+          '=',
+          field('expression', $.resource_usage_expression),
+          $._newline,
+        ),
+        seq(
           field('name', $.callable_commandlist),
           '=',
           field('source', choice(
@@ -849,7 +860,11 @@ export default grammar({
       optional($.execution_modifier),
       alias(/run/i, $.instruction),
       '=',
-      $._callable_section,
+      choice(
+        $._callable_section,
+        // ParseCommandListGeneralCommands matches these by value under any key; only `run` is modeled
+        field('fixed_value', alias($.fixed_value, $.run_instruction_key_value)),
+      ),
       $._newline,
     ),
 
@@ -1104,7 +1119,11 @@ export default grammar({
     arguments: $ => seq(
       '(',
       list_seq(
-        choice($._operational_expression, $.shader_semantic),
+        choice(
+          $._operational_expression,
+          $.shader_semantic,
+          alias(/0x[a-f0-9]{1,16}/i, $.hex_integer),
+        ),
         ',',
         false,
       ),

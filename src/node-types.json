@@ -309,6 +309,10 @@
           "named": true
         },
         {
+          "type": "hex_integer",
+          "named": true
+        },
+        {
           "type": "operational_expression",
           "named": true
         },
@@ -510,6 +514,10 @@
         },
         {
           "type": "resource_property",
+          "named": true
+        },
+        {
+          "type": "shader_identifier",
           "named": true
         },
         {
@@ -3024,7 +3032,18 @@
   {
     "type": "run_instruction",
     "named": true,
-    "fields": {},
+    "fields": {
+      "fixed_value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "run_instruction_key_value",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -4294,6 +4313,10 @@
   },
   {
     "type": "resource_type",
+    "named": true
+  },
+  {
+    "type": "run_instruction_key_value",
     "named": true
   },
   {

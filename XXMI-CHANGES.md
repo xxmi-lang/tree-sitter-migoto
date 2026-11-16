@@ -96,3 +96,30 @@ re-applied on top is in change 3: upstream accepts a bare pool through the hidde
   variables, runtime parameters); the DLL accepts any expression there. The grammar doesn't
   enforce which slot types take ranges.
 - **Test:** `test/corpus/xxmi.txt`, "XXMI: slot expressions and slot/pool ranges".
+
+### 6. `run` accepts the original-texture snapshot and restore commands
+
+- **Construct:** `run = SnapshotOriginalTextures`, `post run = RestoreOriginalTextures`.
+- **DLL source:** `DirectX11/CommandList.cpp`, `ParseCommandListGeneralCommands` compares the value
+  with `snapshotoriginaltextures` / `restoreoriginaltextures` after the `run` branch falls through.
+- **Fix:** `grammar.js`, `run_instruction` accepts a `fixed_value` (`run_instruction_key_value`).
+- **Note:** the DLL ignores the key, and a line without `=` has an empty value, so a bare
+  `snapshotoriginaltextures` line does not match there. Only the `run` key is modeled.
+- **Test:** `test/corpus/xxmi.txt`, "XXMI: run with snapshot and restore of original textures".
+
+### 7. `ps->MatchTextures(Resource) = source`
+
+- **DLL source:** `DirectX11/CommandList.cpp`, `ParseCommandListResourceCopyTargetDirective` and
+  `parse_texture_override_operation` (pixel shaders only, custom resource candidate; both checked
+  by the linter, not the grammar).
+- **Fix:** `grammar.js`, `assignment_statement` accepts `shader_identifier -> property(arguments)`
+  on the left, with a `resource_usage_expression` on the right.
+- **Test:** `test/corpus/xxmi.txt`, "XXMI: MatchTextures destination takes a resource".
+
+### 8. Hash literals as member arguments
+
+- **DLL source:** `DirectX11/CommandList.cpp`, `ParseHashToken` and `CommandArgumentReader::GetHash`
+  (optional `0x`, 1 to 16 hex digits); `SyntaxTarget::ParseMemberArguments` (`MemberArg::Type::Hash`).
+- **Fix:** `grammar.js`, `arguments` accepts `0x` hex literals (`hex_integer`). Resource arguments
+  (`->HammingDistance(ResourceB)`) and `->GetMatchFormat` already parsed.
+- **Test:** `test/corpus/xxmi.txt`, "XXMI: hash literal and resource arguments of resource members".
