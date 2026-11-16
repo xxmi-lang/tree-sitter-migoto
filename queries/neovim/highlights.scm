@@ -204,6 +204,8 @@
 
 (integer) @number
 
+(hex_integer) @number
+
 (character_escape) @string.escape
 
 ; Functions
@@ -229,6 +231,10 @@
   ])
 
 (property_access_expression
+  (resource_property) @function.method.call
+  arguments: (_))
+
+(assignment_statement
   (resource_property) @function.method.call
   arguments: (_))
 

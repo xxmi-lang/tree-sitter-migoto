@@ -2657,8 +2657,9 @@
                       {
                         "type": "ALIAS",
                         "content": {
-                          "type": "SYMBOL",
-                          "name": "fixed_value"
+                          "type": "PATTERN",
+                          "value": "MatchTextures",
+                          "flags": "i"
                         },
                         "named": true,
                         "value": "resource_property"
@@ -2725,8 +2726,9 @@
                       {
                         "type": "ALIAS",
                         "content": {
-                          "type": "SYMBOL",
-                          "name": "fixed_value"
+                          "type": "PATTERN",
+                          "value": "MatchTextures",
+                          "flags": "i"
                         },
                         "named": true,
                         "value": "resource_property"
@@ -3175,8 +3177,9 @@
               "content": {
                 "type": "ALIAS",
                 "content": {
-                  "type": "SYMBOL",
-                  "name": "fixed_value"
+                  "type": "PATTERN",
+                  "value": "(?:snapshot|restore)originaltextures",
+                  "flags": "i"
                 },
                 "named": true,
                 "value": "run_instruction_key_value"

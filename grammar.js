@@ -763,7 +763,7 @@ export default grammar({
           prec.left(PREC.SUFFIX, seq(
             $._limited_resource_operand,
             field('operator', '->'),
-            alias($.fixed_value, $.resource_property),
+            alias(/MatchTextures/i, $.resource_property),
             field('arguments', $.arguments),
           )),
           '=',
@@ -774,7 +774,7 @@ export default grammar({
           prec.left(PREC.SUFFIX, seq(
             $.shader_identifier,
             field('operator', '->'),
-            alias($.fixed_value, $.resource_property),
+            alias(/MatchTextures/i, $.resource_property),
             field('arguments', $.arguments),
           )),
           '=',
@@ -863,7 +863,7 @@ export default grammar({
       choice(
         $._callable_section,
         // ParseCommandListGeneralCommands matches these by value under any key; only `run` is modeled
-        field('fixed_value', alias($.fixed_value, $.run_instruction_key_value)),
+        field('fixed_value', alias(/(?:snapshot|restore)originaltextures/i, $.run_instruction_key_value)),
       ),
       $._newline,
     ),

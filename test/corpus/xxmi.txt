@@ -791,3 +791,59 @@ $d = saturate(asin($x) + acos($x) + atan($x)) * countbits($y) + random($z)
             (arguments
               (named_variable
                 (variable_identifier)))))))))
+
+=====================
+XXMI: run rejects other bare words
+:error
+=====================
+
+[CommandListBadRun]
+run = Foo
+run = 123
+
+---
+
+
+
+=====================
+XXMI: MatchTextures destination rejects other properties
+:error
+=====================
+
+[CommandListBadProperty]
+ps->cb_size(1) = ResourceY
+
+---
+
+
+
+=====================
+XXMI: run and MatchTextures keywords are case-insensitive
+=====================
+
+[CommandListCase]
+RUN = SnapshotOriginalTextures
+PS->matchtextures(ResourceX) = ResourceY
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (run_instruction_key_value))
+      (assignment_statement
+        (shader_identifier)
+        (resource_property)
+        (arguments
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))))))
