@@ -123,3 +123,8 @@ re-applied on top is in change 3: upstream accepts a bare pool through the hidde
 - **Fix:** `grammar.js`, `arguments` accepts `0x` hex literals (`hex_integer`). Resource arguments
   (`->HammingDistance(ResourceB)`) and `->GetMatchFormat` already parsed.
 - **Test:** `test/corpus/xxmi.txt`, "XXMI: hash literal and resource arguments of resource members".
+
+### 9. Corpus cover only
+
+Tests for `[Preset...]` sections, `unless_null`, shader target getters (`ps->cb_first_slot`, …)
+and the expression functions in `function_tokens`; no grammar change was needed.
