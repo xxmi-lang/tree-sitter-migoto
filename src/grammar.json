@@ -2657,8 +2657,9 @@
                       {
                         "type": "ALIAS",
                         "content": {
-                          "type": "SYMBOL",
-                          "name": "fixed_value"
+                          "type": "PATTERN",
+                          "value": "MatchTextures",
+                          "flags": "i"
                         },
                         "named": true,
                         "value": "resource_property"
@@ -2693,6 +2694,66 @@
                         "name": "integer"
                       }
                     ]
+                  }
+                },
+                {
+                  "type": "SYMBOL",
+                  "name": "_newline"
+                }
+              ]
+            },
+            {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "PREC_LEFT",
+                  "value": 15,
+                  "content": {
+                    "type": "SEQ",
+                    "members": [
+                      {
+                        "type": "SYMBOL",
+                        "name": "shader_identifier"
+                      },
+                      {
+                        "type": "FIELD",
+                        "name": "operator",
+                        "content": {
+                          "type": "STRING",
+                          "value": "->"
+                        }
+                      },
+                      {
+                        "type": "ALIAS",
+                        "content": {
+                          "type": "PATTERN",
+                          "value": "MatchTextures",
+                          "flags": "i"
+                        },
+                        "named": true,
+                        "value": "resource_property"
+                      },
+                      {
+                        "type": "FIELD",
+                        "name": "arguments",
+                        "content": {
+                          "type": "SYMBOL",
+                          "name": "arguments"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "type": "STRING",
+                  "value": "="
+                },
+                {
+                  "type": "FIELD",
+                  "name": "expression",
+                  "content": {
+                    "type": "SYMBOL",
+                    "name": "resource_usage_expression"
                   }
                 },
                 {
@@ -3104,8 +3165,27 @@
           "value": "="
         },
         {
-          "type": "SYMBOL",
-          "name": "_callable_section"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "_callable_section"
+            },
+            {
+              "type": "FIELD",
+              "name": "fixed_value",
+              "content": {
+                "type": "ALIAS",
+                "content": {
+                  "type": "PATTERN",
+                  "value": "(?:snapshot|restore)originaltextures",
+                  "flags": "i"
+                },
+                "named": true,
+                "value": "run_instruction_key_value"
+              }
+            }
+          ]
         },
         {
           "type": "SYMBOL",
@@ -4358,6 +4438,16 @@
                 {
                   "type": "SYMBOL",
                   "name": "shader_semantic"
+                },
+                {
+                  "type": "ALIAS",
+                  "content": {
+                    "type": "PATTERN",
+                    "value": "0x[a-f0-9]{1,16}",
+                    "flags": "i"
+                  },
+                  "named": true,
+                  "value": "hex_integer"
                 }
               ]
             },
@@ -4380,6 +4470,16 @@
                       {
                         "type": "SYMBOL",
                         "name": "shader_semantic"
+                      },
+                      {
+                        "type": "ALIAS",
+                        "content": {
+                          "type": "PATTERN",
+                          "value": "0x[a-f0-9]{1,16}",
+                          "flags": "i"
+                        },
+                        "named": true,
+                        "value": "hex_integer"
                       }
                     ]
                   }

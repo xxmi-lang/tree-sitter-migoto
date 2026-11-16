@@ -332,3 +332,518 @@ PoolA = null
         (resource_usage_expression
           (resource_identifier
             (null)))))))
+
+====
+XXMI: run with snapshot and restore of original textures
+====
+
+[CommandList.Textures]
+run = SnapshotOriginalTextures
+post run = RestoreOriginalTextures
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (run_instruction_key_value))
+      (run_instruction
+        (execution_modifier)
+        (instruction)
+        (run_instruction_key_value)))))
+
+====
+XXMI: MatchTextures destination takes a resource
+====
+
+[CommandList.Match]
+ps->MatchTextures(ResourceCandidate) = ResourceReplacement
+ps->MatchTextures(ResourceCandidate) = copy ResourceReplacement
+ps->MatchTextures(ResourceCandidate) = ref ps-t0
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (shader_identifier)
+        (resource_property)
+        (arguments
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (shader_identifier)
+        (resource_property)
+        (arguments
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (resource_modifier)
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (shader_identifier)
+        (resource_property)
+        (arguments
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (resource_modifier)
+          (shader_variable))))))
+
+====
+XXMI: hash literal and resource arguments of resource members
+====
+
+[CommandList.Members]
+$distance = ResourceA->HammingDistance(ResourceB)
+$format = ResourceA->GetMatchFormat
+$hash = ResourceA->HashRegion(0, 16)
+$hash = ResourceA->HashRegion(0x0123456789abcdef, 16)
+$distance = ResourceA->HammingDistance(ps-t0)
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)
+          (arguments
+            (custom_resource
+              (resource_prefix)
+              (section_identifier)))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)
+          (arguments
+            (numeric_constant)
+            (numeric_constant))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)
+          (arguments
+            (hex_integer)
+            (numeric_constant))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)
+          (arguments
+            (shader_variable)))))))
+
+====
+XXMI: preset section
+====
+
+[PresetShowHud]
+$show_hud = 1
+condition = $costume == 1
+unique_triggers_required = 1
+transition = 100
+release_transition = 50
+transition_type = linear
+run = CommandList\ZZMI\Refresh
+
+---
+
+(document
+  (preset_section
+    (preset_section_header
+      (header_prefix)
+      (header_identifier))
+    (preset_section_body
+      (preset_assignment_statement
+        (named_variable
+          (variable_identifier))
+        (numeric_constant))
+      (preset_condition_statement
+        (condition_key)
+        (binary_expression
+          (named_variable
+            (variable_identifier))
+          (numeric_constant)))
+      (preset_setting_statement
+        (preset_section_key)
+        (preset_section_value
+          (numeric_constant)))
+      (preset_setting_statement
+        (preset_section_key)
+        (preset_section_value
+          (numeric_constant)))
+      (preset_setting_statement
+        (preset_section_key)
+        (preset_section_value
+          (numeric_constant)))
+      (preset_setting_statement
+        (preset_section_key)
+        (preset_section_value
+          (fixed_preset_key_value)))
+      (preset_run_instruction
+        (instruction)
+        (callable_commandlist
+          (callable_prefix)
+          (namespace)
+          (section_identifier))))))
+
+====
+XXMI: unless_null operand modifier
+====
+
+[CommandList.Bind]
+ps-t0 = ref unless_null ResourceFoo
+ResourceSaved = copy unless_null ps-t1
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (shader_variable)
+        (resource_usage_expression
+          (resource_modifier)
+          (resource_modifier)
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (custom_resource
+          (resource_prefix)
+          (section_identifier))
+        (resource_usage_expression
+          (resource_modifier)
+          (resource_modifier)
+          (shader_variable))))))
+
+====
+XXMI: shader target getters in expressions
+====
+
+[CommandList.Getters]
+if ps->cb_first_slot <= ps->cb_last_slot && ps->cb_slot_count > 0
+	$cb = ps->cb_size(1) + ps->cb_size(ps->cb_first_slot)
+endif
+$srv = ps->srv_last_slot - ps->srv_first_slot + ps->srv_slot_count
+$mask = ps->srv_mask & 1
+$type = ps->srv_type(0)
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (conditional_statement
+        (if_statement
+          (binary_expression
+            (binary_expression
+              (property_access_expression
+                (shader_identifier)
+                (resource_property))
+              (property_access_expression
+                (shader_identifier)
+                (resource_property)))
+            (binary_expression
+              (property_access_expression
+                (shader_identifier)
+                (resource_property))
+              (numeric_constant)))
+          (block
+            (assignment_statement
+              (named_variable
+                (variable_identifier))
+              (binary_expression
+                (property_access_expression
+                  (shader_identifier)
+                  (resource_property)
+                  (arguments
+                    (numeric_constant)))
+                (property_access_expression
+                  (shader_identifier)
+                  (resource_property)
+                  (arguments
+                    (property_access_expression
+                      (shader_identifier)
+                      (resource_property)))))))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (binary_expression
+            (property_access_expression
+              (shader_identifier)
+              (resource_property))
+            (property_access_expression
+              (shader_identifier)
+              (resource_property)))
+          (property_access_expression
+            (shader_identifier)
+            (resource_property))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (property_access_expression
+            (shader_identifier)
+            (resource_property))
+          (numeric_constant)))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (shader_identifier)
+          (resource_property)
+          (arguments
+            (numeric_constant)))))))
+
+====
+XXMI: math functions in expressions
+====
+
+[CommandList.Math]
+$a = abs(sin($x)) + cos($x) * tan($x)
+$b = floor(sqrt($x)) + ceil(rsqrt($x)) - round(frac($x))
+$c = exp(1) + exp2(2) + log($x) + log2($x) + trunc($x) + sign($x)
+$d = saturate(asin($x) + acos($x) + atan($x)) * countbits($y) + random($z)
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (builtin_function
+            (function_name)
+            (arguments
+              (builtin_function
+                (function_name)
+                (arguments
+                  (named_variable
+                    (variable_identifier))))))
+          (binary_expression
+            (builtin_function
+              (function_name)
+              (arguments
+                (named_variable
+                  (variable_identifier))))
+            (builtin_function
+              (function_name)
+              (arguments
+                (named_variable
+                  (variable_identifier)))))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (binary_expression
+            (builtin_function
+              (function_name)
+              (arguments
+                (builtin_function
+                  (function_name)
+                  (arguments
+                    (named_variable
+                      (variable_identifier))))))
+            (builtin_function
+              (function_name)
+              (arguments
+                (builtin_function
+                  (function_name)
+                  (arguments
+                    (named_variable
+                      (variable_identifier)))))))
+          (builtin_function
+            (function_name)
+            (arguments
+              (builtin_function
+                (function_name)
+                (arguments
+                  (named_variable
+                    (variable_identifier))))))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (binary_expression
+            (binary_expression
+              (binary_expression
+                (binary_expression
+                  (builtin_function
+                    (function_name)
+                    (arguments
+                      (numeric_constant)))
+                  (builtin_function
+                    (function_name)
+                    (arguments
+                      (numeric_constant))))
+                (builtin_function
+                  (function_name)
+                  (arguments
+                    (named_variable
+                      (variable_identifier)))))
+              (builtin_function
+                (function_name)
+                (arguments
+                  (named_variable
+                    (variable_identifier)))))
+            (builtin_function
+              (function_name)
+              (arguments
+                (named_variable
+                  (variable_identifier)))))
+          (builtin_function
+            (function_name)
+            (arguments
+              (named_variable
+                (variable_identifier))))))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (binary_expression
+            (builtin_function
+              (function_name)
+              (arguments
+                (binary_expression
+                  (binary_expression
+                    (builtin_function
+                      (function_name)
+                      (arguments
+                        (named_variable
+                          (variable_identifier))))
+                    (builtin_function
+                      (function_name)
+                      (arguments
+                        (named_variable
+                          (variable_identifier)))))
+                  (builtin_function
+                    (function_name)
+                    (arguments
+                      (named_variable
+                        (variable_identifier)))))))
+            (builtin_function
+              (function_name)
+              (arguments
+                (named_variable
+                  (variable_identifier)))))
+          (builtin_function
+            (function_name)
+            (arguments
+              (named_variable
+                (variable_identifier)))))))))
+
+=====================
+XXMI: run rejects other bare words
+:error
+=====================
+
+[CommandListBadRun]
+run = Foo
+run = 123
+
+---
+
+
+
+=====================
+XXMI: MatchTextures destination rejects other properties
+:error
+=====================
+
+[CommandListBadProperty]
+ps->cb_size(1) = ResourceY
+
+---
+
+
+
+=====================
+XXMI: run and MatchTextures keywords are case-insensitive
+=====================
+
+[CommandListCase]
+RUN = SnapshotOriginalTextures
+PS->matchtextures(ResourceX) = ResourceY
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (run_instruction_key_value))
+      (assignment_statement
+        (shader_identifier)
+        (resource_property)
+        (arguments
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))))))
