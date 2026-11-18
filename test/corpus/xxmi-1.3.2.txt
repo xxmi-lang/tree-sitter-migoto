@@ -1,0 +1,230 @@
+====
+XXMI 1.3.2: run takes the initial-textures names and still the original ones
+====
+
+[CommandListSnapshot]
+run = SnapshotInitialTextures
+post run = RestoreInitialTextures
+run = snapshotoriginaltextures
+post run = restoreoriginaltextures
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (run_instruction_key_value))
+      (run_instruction
+        (execution_modifier)
+        (instruction)
+        (run_instruction_key_value))
+      (run_instruction
+        (instruction)
+        (run_instruction_key_value))
+      (run_instruction
+        (execution_modifier)
+        (instruction)
+        (run_instruction_key_value)))))
+
+====
+XXMI 1.3.2: Filter sections
+====
+
+[FilterBody]
+match_format = DXGI_FORMAT_R8G8B8A8_UNORM
+match_dhash = 0123456789abcdef
+match_confidence = 0.8
+
+[Filter.Hair]
+match_dhash = 1
+
+---
+
+(document
+  (setting_section
+    (setting_section_header
+      (header_prefix)
+      (header_identifier))
+    (setting_section_body
+      (setting_statement
+        (setting_statement_key)
+        (setting_statement_value
+          (resource_format)))
+      (setting_statement
+        (setting_statement_key)
+        (setting_statement_value
+          (fixed_setting_key_value)))
+      (setting_statement
+        (setting_statement_key)
+        (setting_statement_value
+          (numeric_constant)))))
+  (setting_section
+    (setting_section_header
+      (header_prefix)
+      (header_identifier))
+    (setting_section_body
+      (setting_statement
+        (setting_statement_key)
+        (setting_statement_value
+          (numeric_constant))))))
+
+====
+XXMI 1.3.2: filter assignment, comparison and members
+====
+
+[CommandListMatch]
+FilterAlias = FilterBody
+FilterAlias = ref FilterBody
+FilterAlias = null
+local $distance = ResourceNew->HammingDistance(FilterBody)
+local $format = FilterBody->format
+local $confidence = filterbody->Confidence
+local $identity = @FilterBody
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (filter
+          (filter_prefix)
+          (section_identifier))
+        (resource_usage_expression
+          (filter
+            (filter_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (filter
+          (filter_prefix)
+          (section_identifier))
+        (resource_usage_expression
+          (resource_modifier)
+          (filter
+            (filter_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (filter
+          (filter_prefix)
+          (section_identifier))
+        (resource_usage_expression
+          (resource_identifier
+            (null))))
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))
+          (resource_property)
+          (arguments
+            (filter
+              (filter_prefix)
+              (section_identifier)))))
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (filter
+            (filter_prefix)
+            (section_identifier))
+          (resource_property)))
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (property_access_expression
+          (filter
+            (filter_prefix)
+            (section_identifier))
+          (resource_property)))
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (unary_expression
+          (filter
+            (filter_prefix)
+            (section_identifier)))))))
+
+====
+XXMI 1.3.2: filter_index stays a setting key
+====
+
+[TextureOverrideHead]
+hash = 12345678
+filter_index = 1.5
+FILTER_INDEX = 2
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (setting_statement
+        (setting_statement_key)
+        (setting_statement_value
+          (free_text)))
+      (setting_statement
+        (setting_statement_key)
+        (setting_statement_value
+          (numeric_constant)))
+      (setting_statement
+        (setting_statement_key)
+        (setting_statement_value
+          (numeric_constant))))))
+
+====
+XXMI 1.3.2: slot filter in a ps-t slot
+====
+
+[CommandListSlot]
+ps-t[FilterBody] = ResourceNew
+ps-t[filterhair] = copy ResourceOther
+ps-t0 = ResourceNew
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (slot_expression
+          (slot_type)
+          (index_expression
+            (filter_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (slot_expression
+          (slot_type)
+          (index_expression
+            (filter_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (resource_modifier)
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (shader_variable)
+        (resource_usage_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))))))
