@@ -957,6 +957,7 @@ static inline bool scan_custom_resource_identifier(TSLexer *lexer) {
         // mixing whitespace significance in some places but not in others
         switch (lookahead) {
         case '[':
+        case ']':
         case '$':
         case '=':
         case '+':

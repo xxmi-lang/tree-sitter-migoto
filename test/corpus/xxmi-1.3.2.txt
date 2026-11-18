@@ -183,3 +183,48 @@ FILTER_INDEX = 2
         (setting_statement_key)
         (setting_statement_value
           (numeric_constant))))))
+
+====
+XXMI 1.3.2: slot filter in a ps-t slot
+====
+
+[CommandListSlot]
+ps-t[FilterBody] = ResourceNew
+ps-t[filterhair] = copy ResourceOther
+ps-t0 = ResourceNew
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (slot_expression
+          (slot_type)
+          (index_expression
+            (filter_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (slot_expression
+          (slot_type)
+          (index_expression
+            (filter_prefix)
+            (section_identifier)))
+        (resource_usage_expression
+          (resource_modifier)
+          (custom_resource
+            (resource_prefix)
+            (section_identifier))))
+      (assignment_statement
+        (shader_variable)
+        (resource_usage_expression
+          (custom_resource
+            (resource_prefix)
+            (section_identifier)))))))

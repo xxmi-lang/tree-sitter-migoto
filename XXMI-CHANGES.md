@@ -164,3 +164,14 @@ and the expression functions in `function_tokens`; no grammar change was needed.
   were no dedicated rules to drop; the `->MatchTextures(...)` rules (change 7) stay for 1.3.1 specs.
 - **Test:** `test/corpus/xxmi-1.3.2.txt`, "Filter sections", "filter assignment, comparison and members" and
   "filter_index stays a setting key".
+
+### 12. `ps-t[FilterFoo]` slot filtering
+
+- **DLL source (v1.3.2, `e2bca90e`):** `DirectX11/CommandList.cpp:8928` `ResourceCopyTarget::ParseTargetSlotExpression`
+  tries the bracket contents as a filter (`:8977`, `SLOT_FILTER`) before an expression or range;
+  `:9832` `parse_slot_filter_operation` warns that only `ps-t` slots work, which the linter checks, not the
+  grammar.
+- **Fix:** `grammar.js`, the `index_expression` of a `slot_expression` may be a `filter`. `src/scanner.c`,
+  `]` ends a custom resource identifier (section names cannot contain it), otherwise `FilterFoo]` was read
+  as one name.
+- **Test:** `test/corpus/xxmi-1.3.2.txt`, "XXMI 1.3.2: slot filter in a ps-t slot".
