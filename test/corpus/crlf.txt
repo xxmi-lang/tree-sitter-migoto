@@ -1,0 +1,39 @@
+========================================================
+CRLF: run lines with a namespace and no trailing newline
+========================================================
+
+[CommandListMain]
+run = CommandList\Foo
+run = CommandList\Ns\Foo
+$x = 1
+run = CommandList\RabbitFX\AddException
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (callable_commandlist
+          (callable_prefix)
+          (section_identifier)))
+      (run_instruction
+        (instruction)
+        (callable_commandlist
+          (callable_prefix)
+          (namespace)
+          (section_identifier)))
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (numeric_constant))
+      (run_instruction
+        (instruction)
+        (callable_commandlist
+          (callable_prefix)
+          (namespace)
+          (section_identifier))))))

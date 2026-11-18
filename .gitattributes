@@ -39,3 +39,6 @@ Package.resolved linguist-generated
 # Zig bindings
 build.zig linguist-generated
 build.zig.zon linguist-generated
+
+# CRLF corpus input must reach the parser untouched
+test/corpus/crlf.txt -text

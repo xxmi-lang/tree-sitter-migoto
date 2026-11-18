@@ -1,0 +1,197 @@
+=================================================
+EOF: run with a namespace and no trailing newline
+=================================================
+
+[TextureOverrideAttackFX]
+run = CommandList\RabbitFX\AddException
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (callable_commandlist
+          (callable_prefix)
+          (namespace)
+          (section_identifier))))))
+
+========================================================
+EOF: run with a nested namespace and no trailing newline
+========================================================
+
+[CommandListMain]
+run = CommandList\A\B\Foo
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (callable_commandlist
+          (callable_prefix)
+          (namespace)
+          (section_identifier))))))
+
+=======================================================================
+EOF: run with a single segment after the prefix and no trailing newline
+=======================================================================
+
+[CommandListMain]
+run = CommandList\Foo
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (callable_commandlist
+          (callable_prefix)
+          (section_identifier))))))
+
+==========================================
+Run with a single segment after the prefix
+==========================================
+
+[CommandListMain]
+run = CommandList\Foo
+run = CustomShader\Bar
+run = CommandList\Ns\Foo
+
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (callable_commandlist
+          (callable_prefix)
+          (section_identifier)))
+      (run_instruction
+        (instruction)
+        (callable_customshader
+          (callable_prefix)
+          (section_identifier)))
+      (run_instruction
+        (instruction)
+        (callable_commandlist
+          (callable_prefix)
+          (namespace)
+          (section_identifier))))))
+
+===================================================
+EOF: run of a custom shader and no trailing newline
+===================================================
+
+[CommandListMain]
+run = CustomShader\Ns\Foo
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (run_instruction
+        (instruction)
+        (callable_customshader
+          (callable_prefix)
+          (namespace)
+          (section_identifier))))))
+
+=======================================
+EOF: assignment and no trailing newline
+=======================================
+
+[CommandListMain]
+$x = 1
+x = $x
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (named_variable
+          (variable_identifier))
+        (numeric_constant))
+      (assignment_statement
+        (ini_parameter)
+        (named_variable
+          (variable_identifier))))))
+
+==============================================
+EOF: key section value and no trailing newline
+==============================================
+
+[KeyToggle]
+key = no_modifiers VK_F1
+$active = 0,1
+
+---
+
+(document
+  (key_section
+    (key_section_header
+      (header_prefix)
+      (header_identifier))
+    (key_section_body
+      (key_setting_statement
+        (key_section_key)
+        (key_binding_expression
+          (key_binding_modifier)
+          (free_text)))
+      (key_assignment_statement
+        (named_variable
+          (variable_identifier))
+        (static_list_expression
+          (numeric_constant)
+          (numeric_constant))))))
+
+================================================
+EOF: namespaced variable and no trailing newline
+================================================
+
+[CommandListMain]
+$\ns\var = $\other\ns\var
+
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (named_variable
+          (namespace)
+          (variable_identifier))
+        (named_variable
+          (namespace)
+          (variable_identifier))))))
