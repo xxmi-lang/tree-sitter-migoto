@@ -183,6 +183,7 @@ export default grammar({
     $._customshader_callable_prefix,
     $._customresource_header_prefix,
     $._resourcepool_header_prefix,
+    $._filter_header_prefix,
     $._namespace_resolution_start,
     $._namespace_resolution_content,
     $._namespace_resolution_end,
@@ -536,6 +537,10 @@ export default grammar({
         choice(
           seq(
             alias(choice($._customresource_header_prefix, $._resourcepool_header_prefix), $.header_prefix),
+            alias($._suffixed_resource_header, $.header_identifier),
+          ),
+          seq(
+            alias($._filter_header_prefix, $.header_prefix),
             alias($._suffixed_resource_header, $.header_identifier),
           ),
           seq(
@@ -1080,6 +1085,7 @@ export default grammar({
       $.resource_identifier,
       $.custom_resource,
       $.resource_pool,
+      $.filter,
     ),
 
     _limited_resource_operand: $ => choice(
@@ -1088,6 +1094,7 @@ export default grammar({
       $.resource_identifier,
       $.custom_resource,
       $.resource_pool,
+      $.filter,
     ),
 
     builtin_function: $ => prec.left(PREC.SUFFIX, seq(
@@ -1267,6 +1274,13 @@ export default grammar({
       $._useable_resource_identifier,
     ),
 
+    // XXMI 1.3.2: a `[Filter...]` section reference, `FilterFoo`, `@FilterFoo` or `FilterFoo->format`
+    // (ResourceFilterTarget::ParseTarget)
+    filter: $ => seq(
+      alias($._filter_header_prefix, $.filter_prefix),
+      $._useable_resource_identifier,
+    ),
+
     resource_pool: $ => prec.left(PREC.SUFFIX, seq(
       $._resource_pool_base,
       alias($._index_suffix, $.index_expression),
@@ -1301,7 +1315,7 @@ export default grammar({
     // (ResourceCopyTarget::ParseTargetSlotExpression). The DLL rejects ranges on o, vb and so.
     slot_expression: $ => seq(
       alias(/(?:[vhdgpc]s-(?:t|cb)|[pc]s-u|o|vb|so)\[/i, $.slot_type),
-      alias(choice($._index_bound, $._index_range), $.index_expression),
+      alias(choice($._index_bound, $._index_range, $.filter), $.index_expression),
       ']',
     ),
 

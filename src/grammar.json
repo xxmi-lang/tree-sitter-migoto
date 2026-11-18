@@ -1523,6 +1523,29 @@
                       "type": "ALIAS",
                       "content": {
                         "type": "SYMBOL",
+                        "name": "_filter_header_prefix"
+                      },
+                      "named": true,
+                      "value": "header_prefix"
+                    },
+                    {
+                      "type": "ALIAS",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "_suffixed_resource_header"
+                      },
+                      "named": true,
+                      "value": "header_identifier"
+                    }
+                  ]
+                },
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "ALIAS",
+                      "content": {
+                        "type": "SYMBOL",
                         "name": "_include_header_prefix"
                       },
                       "named": true,
@@ -4262,6 +4285,10 @@
         {
           "type": "SYMBOL",
           "name": "resource_pool"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "filter"
         }
       ]
     },
@@ -4287,6 +4314,10 @@
         {
           "type": "SYMBOL",
           "name": "resource_pool"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "filter"
         }
       ]
     },
@@ -6588,6 +6619,24 @@
         }
       ]
     },
+    "filter": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "ALIAS",
+          "content": {
+            "type": "SYMBOL",
+            "name": "_filter_header_prefix"
+          },
+          "named": true,
+          "value": "filter_prefix"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_useable_resource_identifier"
+        }
+      ]
+    },
     "resource_pool": {
       "type": "PREC_LEFT",
       "value": 15,
@@ -6760,6 +6809,10 @@
               {
                 "type": "SYMBOL",
                 "name": "_index_range"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "filter"
               }
             ]
           },
@@ -7615,6 +7668,10 @@
     {
       "type": "SYMBOL",
       "name": "_resourcepool_header_prefix"
+    },
+    {
+      "type": "SYMBOL",
+      "name": "_filter_header_prefix"
     },
     {
       "type": "SYMBOL",

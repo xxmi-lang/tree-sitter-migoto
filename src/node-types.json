@@ -309,6 +309,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "hex_integer",
           "named": true
         },
@@ -370,6 +374,10 @@
             "named": true
           },
           {
+            "type": "filter",
+            "named": true
+          },
+          {
             "type": "operational_expression",
             "named": true
           },
@@ -413,6 +421,10 @@
           },
           {
             "type": "custom_resource",
+            "named": true
+          },
+          {
+            "type": "filter",
             "named": true
           },
           {
@@ -505,6 +517,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "resource_identifier",
           "named": true
         },
@@ -545,6 +561,10 @@
           },
           {
             "type": "custom_resource",
+            "named": true
+          },
+          {
+            "type": "filter",
             "named": true
           },
           {
@@ -677,6 +697,10 @@
           },
           {
             "type": "custom_resource",
+            "named": true
+          },
+          {
+            "type": "filter",
             "named": true
           },
           {
@@ -845,6 +869,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "instruction",
           "named": true
         },
@@ -900,6 +928,10 @@
         },
         {
           "type": "execution_modifier",
+          "named": true
+        },
+        {
+          "type": "filter",
           "named": true
         },
         {
@@ -1275,6 +1307,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "instruction",
           "named": true
         },
@@ -1356,6 +1392,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "instruction",
           "named": true
         },
@@ -1430,6 +1470,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "instruction",
           "named": true
         },
@@ -1485,6 +1529,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "instruction",
           "named": true
         },
@@ -1525,6 +1573,10 @@
         },
         {
           "type": "custom_resource",
+          "named": true
+        },
+        {
+          "type": "filter",
           "named": true
         },
         {
@@ -1587,6 +1639,10 @@
             "named": true
           },
           {
+            "type": "filter",
+            "named": true
+          },
+          {
             "type": "operational_expression",
             "named": true
           },
@@ -1643,6 +1699,29 @@
         },
         {
           "type": "match_expression_field",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "filter",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "filter_prefix",
+          "named": true
+        },
+        {
+          "type": "namespace",
+          "named": true
+        },
+        {
+          "type": "section_identifier",
           "named": true
         }
       ]
@@ -1782,6 +1861,10 @@
             "named": true
           },
           {
+            "type": "filter",
+            "named": true
+          },
+          {
             "type": "operational_expression",
             "named": true
           },
@@ -1869,11 +1952,19 @@
       }
     },
     "children": {
-      "multiple": false,
+      "multiple": true,
       "required": false,
       "types": [
         {
+          "type": "filter_prefix",
+          "named": true
+        },
+        {
           "type": "named_variable",
+          "named": true
+        },
+        {
+          "type": "namespace",
           "named": true
         },
         {
@@ -1886,6 +1977,10 @@
         },
         {
           "type": "runtime_parameter",
+          "named": true
+        },
+        {
+          "type": "section_identifier",
           "named": true
         }
       ]
@@ -1974,6 +2069,10 @@
         },
         {
           "type": "custom_resource",
+          "named": true
+        },
+        {
+          "type": "filter",
           "named": true
         },
         {
@@ -2223,6 +2322,10 @@
             "named": true
           },
           {
+            "type": "filter",
+            "named": true
+          },
+          {
             "type": "operational_expression",
             "named": true
           },
@@ -2337,6 +2440,10 @@
         },
         {
           "type": "custom_resource",
+          "named": true
+        },
+        {
+          "type": "filter",
           "named": true
         },
         {
@@ -2460,6 +2567,10 @@
         },
         {
           "type": "custom_resource",
+          "named": true
+        },
+        {
+          "type": "filter",
           "named": true
         },
         {
@@ -2732,6 +2843,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "resource_identifier",
           "named": true
         },
@@ -2856,6 +2971,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "instruction",
           "named": true
         },
@@ -2933,6 +3052,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "resource_identifier",
           "named": true
         },
@@ -2996,6 +3119,10 @@
         },
         {
           "type": "custom_resource",
+          "named": true
+        },
+        {
+          "type": "filter",
           "named": true
         },
         {
@@ -3802,6 +3929,10 @@
           "named": true
         },
         {
+          "type": "filter",
+          "named": true
+        },
+        {
           "type": "instruction",
           "named": true
         },
@@ -3859,6 +3990,10 @@
           },
           {
             "type": "custom_resource",
+            "named": true
+          },
+          {
+            "type": "filter",
             "named": true
           },
           {
@@ -4157,6 +4292,10 @@
   },
   {
     "type": "file_key_value",
+    "named": true
+  },
+  {
+    "type": "filter_prefix",
     "named": true
   },
   {
