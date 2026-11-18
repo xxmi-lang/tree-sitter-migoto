@@ -863,7 +863,7 @@ export default grammar({
       choice(
         $._callable_section,
         // ParseCommandListGeneralCommands matches these by value under any key; only `run` is modeled
-        field('fixed_value', alias(/(?:snapshot|restore)originaltextures/i, $.run_instruction_key_value)),
+        field('fixed_value', alias(/(?:snapshot|restore)(?:original|initial)textures/i, $.run_instruction_key_value)),
       ),
       $._newline,
     ),

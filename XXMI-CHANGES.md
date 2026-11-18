@@ -131,3 +131,12 @@ re-applied on top is in change 3: upstream accepts a bare pool through the hidde
 
 Tests for `[Preset...]` sections, `unless_null`, shader target getters (`ps->cb_first_slot`, …)
 and the expression functions in `function_tokens`; no grammar change was needed.
+
+### 10. `run` takes the 1.3.2 initial-texture names
+
+- **DLL source:** XXMI-Libs-Package v1.3.2 (`e2bca90e`), `DirectX11/CommandList.cpp:1339` and `:1342`
+  (`snapshotinitialtextures`, `restoreinitialtextures`; v1.3.1 had `...originaltextures`).
+- **Fix:** `grammar.js`, `run_instruction_key_value` matches `(?:snapshot|restore)(?:original|initial)textures`.
+  The old names stay so per-version 1.3.1 specs still parse; the spec decides which one is valid.
+- **Test:** `test/corpus/xxmi-1.3.2.txt`, "XXMI 1.3.2: run takes the initial-textures names and still the
+  original ones".

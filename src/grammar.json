@@ -3178,7 +3178,7 @@
                 "type": "ALIAS",
                 "content": {
                   "type": "PATTERN",
-                  "value": "(?:snapshot|restore)originaltextures",
+                  "value": "(?:snapshot|restore)(?:original|initial)textures",
                   "flags": "i"
                 },
                 "named": true,
