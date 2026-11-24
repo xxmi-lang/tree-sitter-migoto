@@ -175,3 +175,26 @@ and the expression functions in `function_tokens`; no grammar change was needed.
   `]` ends a custom resource identifier (section names cannot contain it), otherwise `FilterFoo]` was read
   as one name.
 - **Test:** `test/corpus/xxmi-1.3.2.txt`, "XXMI 1.3.2: slot filter in a ps-t slot".
+
+### 13. Hex and binary numeric literals
+
+- **Construct:** `local $x = FRAME_NUMBER & 0xFF` and `global locked $s = 0b111` (EFMI `SpatialIdentification.ini`).
+- **DLL source (`8bd31f7`):** `DirectX11/CommandList.cpp:4353` `ParseFloatToken`: `0b` (lowercase only) followed
+  by 1 to 64 binary digits (`IniHandler.cpp:1035` `ParseBinaryLiterals`, which rejects a 65th digit), otherwise
+  `wcstof`, which takes `0x`/`0X` integers and hex floats (`0x1.8p3`). The expression tokenizer starts a
+  literal at a digit or `.` (`CommandList.cpp:5096`) and a sign is a unary operator. `[Constants]` values go
+  through `wcstof` and then the expression parser (`IniHandler.cpp:1179` `ParseFloatValue`). Anything
+  `wcstof` stops at becomes the next token, so `0xG`, `0b2` and `0B11` leave a stray word.
+- **Fix:** `grammar.js`, two more alternatives of `numeric_constant`, so no new node.
+- **Test:** `test/corpus/xxmi.txt`, the "hex and binary literals" and "malformed" cases.
+
+### 14. Expressions in pool indexes and range bounds
+
+- **Construct:** `ref PoolLods[$a * $b + $lod]`, `$PoolDebug[$base + 0] = $hash` (EFMI `MergedSkeleton.ini`).
+- **DLL source (`8bd31f7`):** `CommandList.cpp:4268` `FindResourceCopyTargetTokenEnd` accepts any characters in
+  balanced brackets; `:8771` `ParseTargetPool` parses the index text with `CommandListExpression` unless it is a
+  plain number, and `:8755` `ParseRangeBounds` does the same for each bound; `:10000`
+  `parse_pool_variable_operation` handles pool variable assignments.
+- **Fix:** `grammar.js`, `_index_term` adds binary, unary, parenthesized and function expressions to the
+  single-term bound; a lone term keeps its bare node. `slot_expression` is unchanged.
+- **Test:** `test/corpus/xxmi.txt`, "pool index and range bounds are expressions" and "unterminated pool index".

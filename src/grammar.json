@@ -6724,7 +6724,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "_index_bound"
+              "name": "_index_term"
             },
             {
               "type": "STRING",
@@ -6759,6 +6759,31 @@
         }
       ]
     },
+    "_index_term": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "_index_bound"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "binary_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "unary_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "parenthesized_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "builtin_function"
+        }
+      ]
+    },
     "_index_range": {
       "type": "SEQ",
       "members": [
@@ -6767,7 +6792,7 @@
           "name": "start",
           "content": {
             "type": "SYMBOL",
-            "name": "_index_bound"
+            "name": "_index_term"
           }
         },
         {
@@ -6779,7 +6804,7 @@
           "name": "end",
           "content": {
             "type": "SYMBOL",
-            "name": "_index_bound"
+            "name": "_index_term"
           }
         }
       ]
@@ -7142,6 +7167,21 @@
             "type": "PATTERN",
             "value": "[+-]?\\.\\d+",
             "flags": "i"
+          }
+        },
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[+-]?0x(?:[0-9a-f]+(?:\\.[0-9a-f]*)?|\\.[0-9a-f]+)(?:p[-+]?\\d+)?",
+            "flags": "i"
+          }
+        },
+        {
+          "type": "TOKEN",
+          "content": {
+            "type": "PATTERN",
+            "value": "[+-]?0b[01]{1,64}"
           }
         }
       ]

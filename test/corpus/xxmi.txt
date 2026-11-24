@@ -847,3 +847,208 @@ PS->matchtextures(ResourceX) = ResourceY
           (custom_resource
             (resource_prefix)
             (section_identifier)))))))
+
+=====================
+XXMI: hex and binary literals in expressions
+=====================
+
+[CommandListLiterals]
+local $mask = FRAME_NUMBER & 0xFF
+local $flags = 0b1111 | 0X0f
+local $f = 0x1.8p3 + -0xA
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (runtime_parameter)
+          (numeric_constant)))
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (numeric_constant)
+          (numeric_constant)))
+      (local_initialisation
+        (named_variable
+          (variable_identifier))
+        (binary_expression
+          (numeric_constant)
+          (numeric_constant))))))
+
+=====================
+XXMI: hex and binary literals in [Constants]
+=====================
+
+[Constants]
+global locked $status = 0b1111111111111111111111111111111111111111111111111111111111111111
+global $mask = 0xFFFF
+---
+
+(document
+  (constants_section
+    (constants_section_header
+      (header_identifier))
+    (constants_section_body
+      (global_initialisation
+        (named_variable
+          (variable_identifier))
+        (numeric_constant))
+      (global_initialisation
+        (named_variable
+          (variable_identifier))
+        (numeric_constant)))))
+
+=====================
+XXMI: pool index and range bounds are expressions
+=====================
+
+[CommandListIndexes]
+cs-t1 = ref PoolLods[$a * $b + $lod]
+$PoolDebug[$base + 0] = $hash
+cs-t2 = ref PoolLods[ $a : ($b + 1) ]
+cs-t3 = ref PoolLods[-$a]
+cs-t4 = ref PoolLods[max($a, 1)]
+cs-t5 = ref PoolLods[$a]
+---
+
+(document
+  (commandlist_section
+    (commandlist_section_header
+      (header_prefix)
+      (header_identifier))
+    (commandlist_section_body
+      (assignment_statement
+        (shader_variable)
+        (resource_usage_expression
+          (resource_modifier)
+          (resource_pool
+            (resource_prefix)
+            (section_identifier)
+            (index_expression
+              (binary_expression
+                (binary_expression
+                  (named_variable
+                    (variable_identifier))
+                  (named_variable
+                    (variable_identifier)))
+                (named_variable
+                  (variable_identifier)))))))
+      (assignment_statement
+        (pooled_variable
+          (resource_pool
+            (resource_prefix)
+            (section_identifier)
+            (index_expression
+              (binary_expression
+                (named_variable
+                  (variable_identifier))
+                (numeric_constant)))))
+        (named_variable
+          (variable_identifier)))
+      (assignment_statement
+        (shader_variable)
+        (resource_usage_expression
+          (resource_modifier)
+          (resource_pool
+            (resource_prefix)
+            (section_identifier)
+            (index_expression
+              (named_variable
+                (variable_identifier))
+              (parenthesized_expression
+                (binary_expression
+                  (named_variable
+                    (variable_identifier))
+                  (numeric_constant)))))))
+      (assignment_statement
+        (shader_variable)
+        (resource_usage_expression
+          (resource_modifier)
+          (resource_pool
+            (resource_prefix)
+            (section_identifier)
+            (index_expression
+              (unary_expression
+                (named_variable
+                  (variable_identifier)))))))
+      (assignment_statement
+        (shader_variable)
+        (resource_usage_expression
+          (resource_modifier)
+          (resource_pool
+            (resource_prefix)
+            (section_identifier)
+            (index_expression
+              (builtin_function
+                (function_name)
+                (arguments
+                  (named_variable
+                    (variable_identifier))
+                  (numeric_constant)))))))
+      (assignment_statement
+        (shader_variable)
+        (resource_usage_expression
+          (resource_modifier)
+          (resource_pool
+            (resource_prefix)
+            (section_identifier)
+            (index_expression
+              (named_variable
+                (variable_identifier)))))))))
+
+=====================
+XXMI: malformed hex literal
+:error
+=====================
+
+[CommandListBadHex]
+local $x = 0xG
+---
+
+
+
+=====================
+XXMI: binary literal with a non-binary digit
+:error
+=====================
+
+[CommandListBadBinary]
+local $x = 0b2
+---
+
+=====================
+XXMI: binary literal with an uppercase prefix
+:error
+=====================
+
+[CommandListBadBinary]
+local $x = 0B11
+---
+
+=====================
+XXMI: binary literal over 64 digits
+:error
+=====================
+
+[CommandListBadBinary]
+local $x = 0b11111111111111111111111111111111111111111111111111111111111111111
+---
+
+=====================
+XXMI: unterminated pool index
+:error
+=====================
+
+[CommandListBadIndex]
+cs-t1 = ref PoolLods[$a * $b
+---
+
+

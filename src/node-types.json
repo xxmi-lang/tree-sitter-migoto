@@ -1911,6 +1911,14 @@
         "required": false,
         "types": [
           {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "builtin_function",
+            "named": true
+          },
+          {
             "type": "named_variable",
             "named": true
           },
@@ -1919,11 +1927,19 @@
             "named": true
           },
           {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
             "type": "pooled_variable",
             "named": true
           },
           {
             "type": "runtime_parameter",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
             "named": true
           }
         ]
@@ -1933,11 +1949,23 @@
         "required": false,
         "types": [
           {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "builtin_function",
+            "named": true
+          },
+          {
             "type": "named_variable",
             "named": true
           },
           {
             "type": "numeric_constant",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
             "named": true
           },
           {
@@ -1947,6 +1975,10 @@
           {
             "type": "runtime_parameter",
             "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
           }
         ]
       }
@@ -1955,6 +1987,14 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "binary_expression",
+          "named": true
+        },
+        {
+          "type": "builtin_function",
+          "named": true
+        },
         {
           "type": "filter_prefix",
           "named": true
@@ -1972,6 +2012,10 @@
           "named": true
         },
         {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
           "type": "pooled_variable",
           "named": true
         },
@@ -1981,6 +2025,10 @@
         },
         {
           "type": "section_identifier",
+          "named": true
+        },
+        {
+          "type": "unary_expression",
           "named": true
         }
       ]
