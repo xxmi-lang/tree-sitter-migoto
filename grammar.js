@@ -1302,14 +1302,24 @@ export default grammar({
 
     _index_suffix: $ => seq(
       '[',
-      choice($._index_bound, '*', $._index_range),
+      choice($._index_term, '*', $._index_range),
       ']',
     ),
 
     _index_bound: $ => choice($.numeric_constant, $._scalar_variable, $.runtime_parameter),
 
+    // XXMI: a pool index or range bound is any expression (ResourceCopyTarget::ParseTargetPool,
+    // FindResourceCopyTargetTokenEnd). A single term keeps its bare node, as before.
+    _index_term: $ => choice(
+      $._index_bound,
+      $.binary_expression,
+      $.unary_expression,
+      $.parenthesized_expression,
+      $.builtin_function,
+    ),
+
     // XXMI: `PoolFoo[$a:$b]` and `ps-t[$a:$b]` (ResourceCopyTarget::ParseRangeBounds)
-    _index_range: $ => seq(field('start', $._index_bound), ':', field('end', $._index_bound)),
+    _index_range: $ => seq(field('start', $._index_term), ':', field('end', $._index_term)),
 
     // XXMI: a slot given by an expression or a range, `ps-t[$i]`, `ps-t[$a:$b]`
     // (ResourceCopyTarget::ParseTargetSlotExpression). The DLL rejects ranges on o, vb and so.
@@ -1403,6 +1413,10 @@ export default grammar({
     numeric_constant: _ => choice(
       token(/[+-]?\d+(\.\d+(e[-+]\d+)?)?/i),
       token(/[+-]?\.\d+/i), // apparently 3dmigoto allows floats of the form -.56 and the like
+      // XXMI: hex integers and hex floats go through wcstof, binary through ParseBinaryLiterals
+      // (ParseFloatToken, CommandList.cpp). Only a lowercase `0b` prefix and 1 to 64 digits parse.
+      token(/[+-]?0x(?:[0-9a-f]+(?:\.[0-9a-f]*)?|\.[0-9a-f]+)(?:p[-+]?\d+)?/i),
+      token(/[+-]?0b[01]{1,64}/),
     ),
 
     integer: _ => token(/\d+/i),
